@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El Imperio del Algodón · La Ruta del Contrabando (1829)</title>
+<meta name="description" content="Experiencia web interactiva: la travesía de August en 1829 contada con datos, decisiones y artefactos.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ===== HUD superior: riesgo, fondos y aliado ===== -->
+<header class="hud" aria-label="Estado de la travesía">
+  <div class="brand">1829 · Ruta Clandestina<small>El Rey Algodón</small></div>
+  <div class="meter risk"><span class="lbl">Riesgo</span><span class="bar"><span class="fill" id="riskFill"></span></span><b id="riskVal">0 %</b></div>
+  <div class="meter funds"><span class="lbl">Fondos de la red</span><b id="fundsVal">$100</b></div>
+  <div class="ally"><span id="allyName">Elige a tu aliado</span><span class="seal" id="allySeal">?</span></div>
+</header>
+
+<!-- ===== Riel de engranajes (capítulos) ===== -->
+<nav class="rail" id="rail" aria-label="Capítulos"></nav>
+
+<!-- ===== Capítulos (se llenan desde js/app.js) ===== -->
+<main id="story"></main>
+
+<footer>
+  <p>El Imperio del Algodón · proyecto transmedia universitario. Datos de las gráficas: tablero «Registro de la Plantación 1820–1830» (valores ilustrativos de uso académico).</p>
+</footer>
+
+<!-- ===== Bandeja de inventario ===== -->
+<div class="tray" aria-label="Inventario táctico">
+  <span class="label">INVENTARIO</span>
+  <button class="item" data-item="reloj"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="23" r="13" fill="#d2a334" stroke="#7a5a1a" stroke-width="2"/><circle cx="20" cy="23" r="10" fill="#f3e6cb"/><path d="M20 23V16M20 23l5 3" stroke="#2a1d12" stroke-width="1.6" stroke-linecap="round"/><rect x="17" y="5" width="6" height="5" rx="1.5" fill="#b8892a"/></svg><span>Reloj</span></button>
+  <button class="item" data-item="eslabon"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="6" y="12" width="17" height="11" rx="5.5" fill="none" stroke="#8f8f8f" stroke-width="4"/><rect x="17" y="18" width="17" height="11" rx="5.5" fill="none" stroke="#bdbdbd" stroke-width="4"/></svg><span>Eslabón</span></button>
+  <button class="item" data-item="capsula"><svg viewBox="0 0 40 40" aria-hidden="true"><g fill="#f7f1e3" stroke="#cbbf9f"><circle cx="20" cy="15" r="7"/><circle cx="13" cy="21" r="7"/><circle cx="27" cy="21" r="7"/><circle cx="20" cy="26" r="7"/></g><path d="M20 32l-5 5M20 32l5 5" stroke="#6b4a24" stroke-width="2"/></svg><span>Cápsula</span></button>
+  <button class="item" data-item="mapa"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M6 9l9-3 10 3 9-3v25l-9 3-10-3-9 3z" fill="#8a6240" stroke="#3d2817" stroke-width="1.5"/><path d="M10 26c6-8 10 2 20-12" stroke="#f0c75a" stroke-width="1.6" fill="none" stroke-dasharray="3 2"/></svg><span>Mapa de cuero</span></button>
+</div>
+
+<!-- ===== Modal de inventario ===== -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="paper"><button class="close" aria-label="Cerrar">×</button><div id="modalBody"></div></div>
+</div>
+
+<div class="dark-veil" id="veil"></div>
+<div class="tip-float" id="tip"></div>
+
+<script src="chart.umd.min.js"></script>
+<script src="data.js"></script>
+<script src="mapa-sur.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
