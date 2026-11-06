@@ -341,6 +341,11 @@ function mecanismoSVG() {
     <g id="lens" style="display:none"><g clip-path="url(#lensClip)"><rect x="0" y="0" width="400" height="400" fill="#f3e6cb"/><use id="lensUse" href="#mechAll"/></g>
       <circle id="lensRing" cx="-200" cy="-200" r="62" fill="none" stroke="#b8892a" stroke-width="8"/></g></svg>`;
 }
+const LAMINA = [
+  { img: 'reloj-explosion.jpg', t: 'Vista en explosión', s: 'Cristal, bisel con flores de algodón, esfera con el mapa del Sur, mecanismo y tapa trasera, separados capa por capa.' },
+  { img: 'reloj-corte.jpg', t: 'Vista en corte', s: 'Sección del mecanismo: los ejes y el tren de engranajes que marcan los turnos de guardia. En rojo, el escape del reloj.' },
+  { img: 'reloj-zoom.jpg', t: 'Detalle bajo la lupa', s: 'Grabado en el engranaje central: 32.31° N, −86.90° O, junto a una cápsula de algodón y la marca KING.' }
+];
 function cap5() {
   const c = CAPITULOS[5];
   const modos = ['Despiece', 'Explosión', 'Corte', 'Transparencia', 'Zoom'];
@@ -354,13 +359,24 @@ function cap5() {
         <p>Hay marcas diminutas en la placa trasera. Usa <b>Transparencia</b> o la <b>lupa</b> para leerlas.</p>
         <div class="stats" style="grid-template-columns:1fr 1fr"><div class="stat"><span>Latitud</span><b id="lat" style="font-size:20px">— —</b></div><div class="stat"><span>Longitud</span><b id="lon" style="font-size:20px">— —</b></div></div>
         <p class="note" style="margin-top:10px">Cruzadas con el mapa de cuero, señalan un punto ciego en la bahía.</p></div></div>
+      <div class="span-12"><div class="paper"><div class="viz-head"><div><div class="note" style="letter-spacing:.15em">LÁMINA TÉCNICA · EL RELOJ DEL CAPATAZ</div>
+        <div class="t" id="laminaT">Vista en explosión</div><div class="s" id="laminaS"></div></div></div>
+        <div class="lamina"><figure><img id="laminaImg" src="reloj-explosion.jpg" alt="Lámina técnica del reloj de bolsillo"></figure>
+          <div class="lamina-side"><div class="lamina-thumbs">${LAMINA.map((l, i) => `<button data-l="${i}" class="${i === 0 ? 'on' : ''}"><img src="${l.img}" alt=""><span>${l.t}</span></button>`).join('')}</div>
+          <p class="note">La lámina cambia con el modo elegido en el visor. Pronto se reemplazará por un modelo 3D interactivo.</p>
+          <a class="toggle-table" href="reloj-lamina.jpg" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;margin-top:6px">Ver lámina completa</a></div></div></div></div>
       <div class="span-12">${dilema(c)}</div>
     </div>`);
+  const verLamina = i => { const l = LAMINA[i]; $('#laminaImg').src = l.img; $('#laminaImg').alt = l.t; $('#laminaT').textContent = l.t; $('#laminaS').textContent = l.s;
+    $$('.lamina-thumbs button').forEach((b, j) => b.classList.toggle('on', j === i)); };
+  $$('.lamina-thumbs button').forEach(b => b.addEventListener('click', () => verLamina(+b.dataset.l)));
+  verLamina(0);
   const ly = id => $('#' + id);
   const revelar = () => { $('#lat').textContent = '32.31° N'; $('#lon').textContent = '86.90° O'; $('#coords').textContent = '32.31° N · 86.90° O'; };
   const reset = () => { ['lyBack', 'lyGears', 'lyDial', 'lyCase'].forEach(i => { ly(i).style.transform = ''; ly(i).style.opacity = 1; ly(i).removeAttribute('clip-path'); }); $('#lens').style.display = 'none'; };
   const aplicar = m => {
     reset();
+    verLamina({ Despiece: 0, 'Explosión': 0, Corte: 1, Transparencia: 2, Zoom: 2 }[m]);
     if (m === 'Despiece') { ly('lyCase').style.transform = 'translate(-40px,-40px) scale(1.05)'; ly('lyDial').style.transform = 'translate(25px,25px)'; }
     if (m === 'Explosión') { ly('lyCase').style.transform = 'translate(0,-60px)'; ly('lyDial').style.transform = 'translate(70px,-10px) scale(.6)'; ly('lyDial').style.transformOrigin = '200px 200px'; ly('lyGears').style.transform = 'translate(-30px,20px)'; }
     if (m === 'Corte') { ly('lyDial').setAttribute('clip-path', 'url(#corte)'); ly('lyCase').setAttribute('clip-path', 'url(#corte)'); }
@@ -541,7 +557,7 @@ function riel() {
   $$('.chapter').forEach(s => io.observe(s));
 }
 const INVENTARIO = {
-  reloj: () => `<h3>El reloj de bolsillo del capataz</h3><p>Averiado, pero su mecanismo guarda los turnos de guardia. Sirve para medir el tiempo en el trayecto y esconde coordenadas en su placa trasera.</p>
+  reloj: () => `<h3>El reloj de bolsillo del capataz</h3><img src="reloj-lamina.jpg" alt="Lámina técnica del reloj de bolsillo" style="width:100%;display:block;margin:8px 0;border:1px solid var(--linea)"><p>Averiado, pero su mecanismo guarda los turnos de guardia. Sirve para medir el tiempo en el trayecto y esconde coordenadas en su placa trasera.</p>
     <div class="chart-box" style="height:180px"><canvas id="mini"></canvas></div><p class="note">Guardias activos por franja (cap. 01).</p>`,
   eslabon: () => `<h3>El eslabón de hierro</h3><p>Arrancado de uno de sus antiguos grilletes en la herrería de Oak Ridge. Amuleto, recordatorio del dolor de su gente y, en el clímax, arma de liberación.</p><p class="quote">«La promesa inviolable de ganar su libertad.»</p>`,
   capsula: () => `<h3>La cápsula de algodón crudo</h3><p>Fibras suaves y espinas duras: la riqueza dorada del Sur construida sobre la condena de su pueblo.</p>

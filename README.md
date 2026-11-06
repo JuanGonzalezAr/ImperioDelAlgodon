@@ -19,6 +19,7 @@ Experiencia web interactiva (scrolling story) del proyecto transmedia *El Imperi
 | `*.woff2` | Tipografías Cinzel, Lora e Inter |
 | `august.jpg`, `gideon.jpg` | Retratos de los personajes |
 | `august-cartel.jpg`, `grabado.jpg` | Imágenes de la portada del periódico |
+| `reloj-*.jpg` | Lámina técnica del reloj (capítulo 05 e inventario) |
 
 ## Cómo editar
 
