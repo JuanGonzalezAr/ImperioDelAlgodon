@@ -39,8 +39,9 @@ function tabla(cabeceras, filas) {
   return `<table class="data-table"><thead><tr>${cabeceras.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${
     filas.map(f => `<tr>${f.map((c, i) => `<td class="${i ? 'n' : ''}">${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
 }
-function tarjetaViz({ id, kicker, titulo, sub, kpis, cuerpo, nota, tablaHTML, alto }) {
-  return `<div class="paper">
+let expN = 0;
+function tarjetaViz({ id, kicker, titulo, sub, kpis, cuerpo, nota, tablaHTML, alto, abierto }) {
+  const inner = `<div class="paper">
     <div class="viz-head"><div>${kicker ? `<div class="note" style="letter-spacing:.15em;text-transform:uppercase">${kicker}</div>` : ''}
       <div class="t">${titulo}</div>${sub ? `<div class="s">${sub}</div>` : ''}</div>
       ${tablaHTML ? `<button class="toggle-table" data-for="${id}-t">Ver tabla</button>` : ''}</div>
@@ -48,6 +49,20 @@ function tarjetaViz({ id, kicker, titulo, sub, kpis, cuerpo, nota, tablaHTML, al
     ${cuerpo || `<div class="chart-box ${alto ? 'tall' : ''}"><canvas id="${id}" role="img" aria-label="${titulo}"></canvas></div>`}
     ${tablaHTML ? `<div id="${id}-t">${tablaHTML}</div>` : ''}
     ${nota ? `<p class="note" style="margin-top:10px">${nota}</p>` : ''}
+  </div>`;
+  if (abierto) return inner;
+  const n = ++expN, letra = String.fromCharCode(64 + n);
+  return `<div class="expediente" data-exp="${id}">
+    <button class="exp-cover" aria-expanded="false" aria-controls="exp-${id}">
+      <span class="exp-tab">EXP. ${letra}</span>
+      <span class="exp-clip" aria-hidden="true"></span>
+      <span class="exp-stamp">Confidencial</span>
+      <span class="exp-k">${kicker || 'Evidencia'}</span>
+      <span class="exp-t">${titulo}</span>
+      ${sub ? `<span class="exp-s">${sub}</span>` : ''}
+      <span class="exp-open">Abrir expediente ▸</span>
+    </button>
+    <div class="exp-body" id="exp-${id}" hidden>${inner}</div>
   </div>`;
 }
 function testimonio(c) {
@@ -61,7 +76,9 @@ function testimonio(c) {
 }
 function cabecera(c) {
   return `<div class="ch-head"><span class="ch-num">${String(c.id).padStart(2, '0')}</span><h2 class="ch-title" id="cap${c.id}t">${c.titulo}</h2></div>
-    ${c.lugar ? `<p class="ch-sub"><span style="font-style:normal;font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--laton)">${c.lugar}</span><br>${c.sub}</p>` : ''}`;
+    ${c.lugar ? `<p class="ch-sub"><span style="font-style:normal;font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--laton)">${c.lugar}</span><br>${c.sub}</p>` : ''}
+    ${c.escena ? `<div class="escena"><div class="escena-k">Escena</div><p>${c.escena}</p></div>
+      <div class="evid-k">Evidencia sobre la mesa <small>· abre los expedientes para analizar los datos antes de decidir</small></div>` : ''}`;
 }
 function dilema(c) {
   const elegida = estado.decisiones[c.id];
@@ -78,10 +95,35 @@ function dilema(c) {
     ${c.id < 7 ? `<a class="next" href="#cap${c.id + 1}">Continuar al capítulo ${String(c.id + 1).padStart(2, '0')} →</a>` : ''}
   </div>`;
 }
+function bloquear(s) {
+  const exps = $$('.expediente', s), dil = $('.dilemma[id^="dil-"]', s);
+  if (!exps.length || !dil) return;
+  const capId = +dil.id.replace('dil-', '');
+  if (estado.decisiones[capId] !== undefined) return;
+  const opts = $('.options', dil);
+  opts.classList.add('locked'); $$('.opt', opts).forEach(b => b.disabled = true);
+  const aviso = document.createElement('div'); aviso.className = 'lock-note';
+  opts.before(aviso);
+  const act = () => {
+    const ab = exps.filter(e => e.classList.contains('open')).length;
+    if (ab >= exps.length) { opts.classList.remove('locked'); $$('.opt', opts).forEach(b => b.disabled = false); aviso.innerHTML = '🔓 Evidencia revisada: ya puedes decidir.'; aviso.classList.add('ok'); }
+    else aviso.innerHTML = `🔒 Revisa la evidencia para decidir · <b>${ab} de ${exps.length}</b> expedientes abiertos`;
+  };
+  s._actLock = act; act();
+}
+function abrirExpediente(e) {
+  if (e.classList.contains('open')) return;
+  e.classList.add('open'); const body = $('.exp-body', e); body.hidden = false;
+  $('.exp-cover', e).setAttribute('aria-expanded', 'true');
+  requestAnimationFrame(() => $$('canvas', body).forEach(cv => { const ch = Chart.getChart(cv); if (ch) ch.resize(); }));
+  const s = e.closest('.chapter'); if (s && s._actLock) s._actLock();
+}
 function seccion(id, html) {
   const s = document.createElement('section');
   s.className = 'chapter'; s.id = 'cap' + id; s.setAttribute('aria-labelledby', 'cap' + id + 't');
-  s.innerHTML = html; story.appendChild(s); return s;
+  s.innerHTML = html; story.appendChild(s); expN = 0;
+  bloquear(s);
+  return s;
 }
 
 /* ==========================================================
@@ -615,6 +657,7 @@ CAPITULOS = RUTAS[estado.aliado] || RUTAS.august;
 cap0(); cap1(); cap2(); cap3(); cap4(); cap5(); cap6(); cap7();
 story.addEventListener('click', e => {
   const b = e.target.closest('.opt'); if (b && !b.disabled) decidir(+b.dataset.cap, +b.dataset.opt);
+  const ex = e.target.closest('.exp-cover'); if (ex) abrirExpediente(ex.closest('.expediente'));
   const t = e.target.closest('.toggle-table'); if (t) { const tb = $('#' + t.dataset.for + ' .data-table'); tb.classList.toggle('show'); t.textContent = tb.classList.contains('show') ? 'Ocultar tabla' : 'Ver tabla'; }
 });
 Object.keys(estado.decisiones).forEach(k => mostrarResultado(+k));

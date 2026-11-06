@@ -64,7 +64,8 @@ const DATOS = {
 const RUTA_AUGUST = [
   { id: 0, titulo: 'El Despacho Clandestino', corto: 'Elección de aliado' },
   {
-    id: 1, titulo: 'El Yugo en Oak Ridge', corto: 'El yugo',
+    id: 1, titulo: 'Hora Cero en Oak Ridge', corto: 'El yugo',
+    escena: 'El sol cae a plomo sobre los campos blancos de Oak Ridge. Desde la herrería, August escucha a dos capataces: los terratenientes se cansaron de castigarlo y han decidido ejecutarlo antes de que su rebeldía contagie a los demás. Le quedan días, quizá horas. Esa misma tarde, durante las labores de mantenimiento en la casa señorial, ve sobre el escritorio un reloj de bolsillo averiado. En la herrería aprendió a entender los engranajes: ese reloj puede darle el control del tiempo.',
     lugar: 'Plantación Oak Ridge · 14 de octubre de 1829',
     sub: 'Toda fuga empieza con un patrón. Todo patrón deja un registro.',
     testimonio: 'Los terratenientes de Oak Ridge ordenaron mi ejecución. Antes de huir, necesito sacar el reloj averiado del capataz del escritorio de la casa señorial para entender sus rondas de guardia.',
@@ -81,7 +82,8 @@ const RUTA_AUGUST = [
     ]
   },
   {
-    id: 2, titulo: 'Las 12 Horas a Oscuras', corto: '12 horas',
+    id: 2, titulo: 'Seis Horas, Seis Perros', corto: '12 horas',
+    escena: 'Temprano en la mañana, sin decírselo a nadie, August se esconde entre los fardos de un carromato que sale hacia la ciudad. El aire es sofocante y el algodón crudo le raspa la piel. Aprieta en el bolsillo el eslabón de hierro y una cápsula de algodón; con el reloj pegado al oído cuenta los minutos entre cada parada. A la sexta hora la carreta se detiene en seco: botas, voces y el jadeo de los perros del puesto de control.',
     lugar: 'Carromato de algodón · camino a la ciudad',
     sub: 'En la oscuridad, el tiempo es la única luz.',
     testimonio: 'Llevo seis horas bajo el algodón. El carromato se detiene: oigo botas, voces y perros en el puesto de control.',
@@ -98,7 +100,8 @@ const RUTA_AUGUST = [
     ]
   },
   {
-    id: 3, titulo: 'La Logística del Contrabando', corto: 'Contrabando',
+    id: 3, titulo: 'La Ruta de las Aguas Muertas', corto: 'Contrabando',
+    escena: 'Al caer la noche, August se escurre del carromato en el puerto fluvial y se adentra en el Callejón del Humo. En el sótano de una antigua distribuidora de grano encuentra a Gideon, su hermano mayor, endurecido por diez años de calle. Gideon duda: enfrentarse a los magnates del algodón es un suicidio. Entonces despliega sobre la mesa su mapa de cuero, y August pone el reloj a su lado.',
     lugar: 'Sótano del Callejón del Humo · puerto fluvial',
     sub: 'Dos hermanos, un mapa de cuero y una sola oportunidad.',
     testimonio: 'Gideon duda del plan. Tenemos que mover el primer cargamento hacia el puerto sin caer en la emboscada de los caminos principales.',
@@ -116,6 +119,7 @@ const RUTA_AUGUST = [
   },
   {
     id: 4, titulo: 'El Mercado del Puerto', corto: 'Mercado',
+    escena: 'La alianza da sus primeros frutos: la Red ha interceptado 50 fardos de algodón. En una taberna del muelle, entre el humo de las pipas y un ejemplar arrugado de The Southern Gazette, los hermanos discuten qué hacer con la carga. El precio del algodón lleva años cayendo, y cada venta deja un rastro que los informantes del sheriff pueden seguir.',
     lugar: 'Taberna del muelle · mesa de negociación',
     sub: 'El algodón robado vale lo que el imperio dice que vale.',
     testimonio: 'La Red interceptó 50 fardos de algodón. ¿Los vendemos ya en el mercado negro o esperamos a que suba el precio internacional?',
@@ -132,7 +136,8 @@ const RUTA_AUGUST = [
     ]
   },
   {
-    id: 5, titulo: 'El Secreto en el Mecanismo', corto: 'Mecanismo',
+    id: 5, titulo: 'El Corazón del Reloj', corto: 'Mecanismo',
+    escena: 'En la mesa del relojero, Gideon desarma el reloj del capataz pieza por pieza. Bajo la esfera, entre los engranajes, aparece algo que nadie esperaba: unas marcas diminutas grabadas en el metal. No son números de serie. Son coordenadas.',
     lugar: 'Mesa del relojero · Callejón del Humo',
     sub: 'Las piezas pequeñas guardan los secretos grandes.',
     pregunta: '¿Qué hacen con las coordenadas?',
@@ -145,7 +150,8 @@ const RUTA_AUGUST = [
     ]
   },
   {
-    id: 6, titulo: 'El Sabotaje al Almacén Central', corto: 'Almacén',
+    id: 6, titulo: 'Fuego en el Almacén', corto: 'Almacén',
+    escena: 'La noche del gran sabotaje al Almacén Central de Acopio, los cazadores de recompensas los estaban esperando. Un cargamento arde y el humo lo cubre todo. Entre los fardos en llamas aparece el antiguo capataz de Oak Ridge, el mismo que firmó la orden de ejecución, y se interpone entre August y la salida.',
     lugar: 'Almacén Central de Acopio · distrito del río',
     sub: 'El registro quedó expuesto. Solo quedan el fuego, el agua y la fuerza.',
     testimonio: 'El capataz nos acorraló junto a los fardos en llamas. El fuego avanza rápido… ¿cómo salimos?',
@@ -162,7 +168,8 @@ const RUTA_AUGUST = [
     ]
   },
   {
-    id: 7, titulo: 'El Destino Final de la Red', corto: 'Dossier',
+    id: 7, titulo: 'El Último Barco al Norte', corto: 'Dossier',
+    escena: 'Aquella noche, el fuego sobre el río demostró a toda la ciudad que el imperio no era invencible. Al amanecer, una barcaza espera en el muelle con rumbo al Norte libre. August podría subir y no volver a mirar atrás. Pero más de 40 familias esperan en el Sur a que alguien les abra el camino.',
     lugar: 'Muelle al amanecer',
     sub: 'Hay una barcaza lista hacia el Norte. La Red en el Sur necesita un líder.',
     pregunta: '¿Huir al Norte o quedarse a liderar la Red?',
@@ -187,6 +194,7 @@ const RUTA_GIDEON = [
   { id: 0, titulo: 'El Despacho Clandestino', corto: 'Elección de aliado' },
   {
     id: 1, titulo: 'Las Sombras del Muelle', corto: 'Muelle',
+    escena: 'Hace diez años que Gideon fue vendido y separado de su familia. Desde entonces aprendió el código del Callejón del Humo: qué guardia acepta monedas, qué barcaza sale vacía y qué silencio vale más que el oro. Ahora los hacendados lo llaman «El Fantasma del Río» y su cara empieza a circular en los avisos. Para seguir operando necesita saber qué cargamentos saldrán del muelle esta semana.',
     lugar: 'Callejón del Humo · puerto fluvial, septiembre de 1829',
     sub: 'Diez años vendiendo lo que el imperio pierde.',
     testimonio: 'Los terratenientes ponen precio a mi cabeza: me llaman «El Fantasma del Río». Para seguir moviendo mercancía necesito el registro de cargamentos que el aduanero guarda en su oficina del muelle.',
@@ -207,6 +215,7 @@ const RUTA_GIDEON = [
   },
   {
     id: 2, titulo: 'La Noche de las Barcazas', corto: 'Barcazas',
+    escena: 'Llueve sobre el puerto. En el canal, dos barcazas cargadas con algodón interceptado esperan la señal para salir. Pero el aduanero, alertado por los robos, ha cerrado el paso con un candado y sus hombres revisan cada manifiesto. Gideon observa desde la sombra de las estacas: si las barcazas no salen antes del amanecer, la carga y la red estarán perdidas.',
     lugar: 'Canal del muelle · madrugada',
     sub: 'El río no perdona a quien llega tarde.',
     testimonio: 'Dos barcazas con algodón interceptado esperan salir al Norte. El aduanero cerró el acceso al canal con un candado y sus guardias revisan los manifiestos en la entrada.',
@@ -233,6 +242,7 @@ const RUTA_GIDEON = [
   },
   {
     id: 3, titulo: 'El Hermano Perdido', corto: 'Hermano',
+    escena: 'Una noche, un muchacho cubierto de polvo de algodón pregunta por él en las tabernas. Gideon lo hace bajar al sótano a punta de revólver. Bajo la luz del farol reconoce el rostro: es August, su hermano menor, al que creía perdido. Trae un reloj robado, los horarios de las carretas y los nombres de cada capataz corrupto de Oak Ridge.',
     lugar: 'Sótano de la distribuidora de grano · Callejón del Humo',
     sub: 'Diez años después, la sangre vuelve a tocar la puerta.',
     testimonio: 'Un fugitivo de Oak Ridge pregunta por mí en las tabernas. Es August, mi hermano menor. Dice que conoce los horarios de las carretas y los nombres de los capataces corruptos.',
@@ -250,6 +260,7 @@ const RUTA_GIDEON = [
   },
   {
     id: 4, titulo: 'El Precio del Silencio', corto: 'Precio',
+    escena: 'Con August en la red, los robos se multiplican. En la taberna del muelle, un comerciante del Norte deja caer una bolsa de monedas sobre la mesa: quiere todo el algodón que intercepten. Es más dinero del que Gideon ha visto nunca, y también más atención de la que la red puede soportar.',
     lugar: 'Taberna del muelle · mesa de negociación',
     sub: 'Quien controla el precio, controla el puerto.',
     testimonio: 'Los grandes terratenientes controlan el 70 % del mercado; nuestra red apenas mueve el 10 %. Un comerciante del Norte ofrece comprar todo lo que interceptemos, pero quiere la carga completa de una sola vez.',
@@ -267,6 +278,7 @@ const RUTA_GIDEON = [
   },
   {
     id: 5, titulo: 'Lo que Esconde el Reloj', corto: 'Reloj',
+    escena: 'August le entrega el reloj del capataz. Gideon, que aprendió a abrir cerraduras en el mercado negro, lo desarma sobre la mesa del relojero. Entre los engranajes encuentra unas coordenadas grabadas, y al ponerlas sobre su mapa de cuero el corazón le da un vuelco: señalan un rincón de la bahía que conoce bien.',
     lugar: 'Mesa del relojero · Callejón del Humo',
     sub: 'August trajo algo más que su libertad: el reloj del capataz.',
     pregunta: '¿Qué hace Gideon con las coordenadas?',
@@ -280,6 +292,7 @@ const RUTA_GIDEON = [
   },
   {
     id: 6, titulo: 'La Compuerta del Canal', corto: 'Compuerta',
+    escena: 'El sabotaje al Almacén Central sale mal: los cazadores de recompensas los esperaban. August queda atrapado entre los fardos en llamas frente a su antiguo capataz. Gideon, del otro lado, alcanza la compuerta del canal, la única salida que no se ha derrumbado. Está trabada, y el humo no deja ver.',
     lugar: 'Almacén Central de Acopio · distrito del río',
     sub: 'Mientras August pelea, alguien tiene que abrir la salida.',
     testimonio: 'El capataz acorraló a August entre los fardos en llamas. Yo estoy junto a la compuerta del canal: está trabada y el humo no deja ver.',
@@ -298,6 +311,7 @@ const RUTA_GIDEON = [
   },
   {
     id: 7, titulo: 'El Destino Final de la Red', corto: 'Dossier',
+    escena: 'Al amanecer, con el almacén en ruinas y los fondos de la red en los bolsillos, Gideon mira a su hermano. Tienen botes, dinero y un puerto seguro. Podrían irse al Norte esta misma mañana. Pero en las plantaciones las familias siguen esperando a que alguien les abra el camino.',
     lugar: 'Muelle al amanecer',
     sub: 'Gideon tiene dinero, botes y a su hermano de vuelta. Falta decidir qué hacer con ellos.',
     pregunta: '¿Huir al Norte con los fondos o quedarse a liderar la Red?',

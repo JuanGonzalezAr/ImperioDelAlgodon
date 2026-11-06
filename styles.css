@@ -328,3 +328,44 @@ body.gz-open{overflow:hidden}
 .lamina-thumbs button.on{outline:2px solid var(--tinta)}
 .modal .paper{max-height:90vh;overflow:auto}
 @media (max-width:900px){.lamina{grid-template-columns:1fr}.lamina figure{height:300px}}
+
+/* ==========================================================
+   EXPEDIENTES (carpetas de evidencia) y ESCENA narrativa
+   ========================================================== */
+.escena{position:relative;margin:4px 0 26px;padding:22px 26px 22px 30px;background:linear-gradient(90deg,rgba(139,30,25,.18),rgba(0,0,0,.15) 60%,transparent);border-left:4px solid var(--cera);border-radius:2px;animation:escenaIn 1.2s ease-out both}
+.escena-k{font-family:var(--display);font-size:11px;letter-spacing:.35em;color:var(--laton);margin-bottom:8px}
+.escena p{font-family:var(--serif);font-size:clamp(17px,1.6vw,20px);line-height:1.7;color:#efe1c4;max-width:880px}
+.escena p::first-letter{font-family:var(--display);font-size:2.6em;float:left;line-height:.9;margin:6px 10px 0 0;color:var(--laton)}
+@keyframes escenaIn{from{opacity:0;transform:translateY(10px)}}
+.evid-k{font-family:var(--display);font-size:12px;letter-spacing:.25em;text-transform:uppercase;color:var(--laton);margin:0 0 14px;border-top:1px dashed rgba(210,163,52,.35);padding-top:12px}
+.evid-k small{font-family:var(--sans);letter-spacing:.02em;text-transform:none;color:#b9a27a;font-size:12px}
+
+.expediente{position:relative}
+.exp-cover{position:relative;display:block;width:100%;min-height:200px;text-align:left;border:0;cursor:pointer;margin-top:16px;
+  padding:30px 24px 20px;color:#3a2a14;border-radius:2px 8px 8px 8px;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.025) 0 1px,transparent 1px 4px),
+    radial-gradient(ellipse at 20% 15%,rgba(255,255,255,.35),transparent 55%),
+    radial-gradient(ellipse at 85% 90%,rgba(120,70,20,.25),transparent 55%),#d6b26f;
+  box-shadow:0 14px 30px rgba(0,0,0,.55), inset 0 0 0 1px rgba(90,60,20,.35);transition:transform .25s, box-shadow .25s}
+.exp-cover:hover,.exp-cover:focus-visible{transform:translateY(-4px) rotate(-.4deg);box-shadow:0 20px 38px rgba(0,0,0,.6), inset 0 0 0 1px rgba(90,60,20,.35)}
+.exp-tab{position:absolute;top:-16px;left:0;height:18px;padding:2px 16px 0;border-radius:6px 10px 0 0;background:#d6b26f;font-family:var(--display);font-weight:700;font-size:11px;letter-spacing:.2em;color:#5b3f14;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+.exp-clip{position:absolute;top:-8px;right:38px;width:16px;height:46px;border:3px solid #9a9a9a;border-radius:9px;border-bottom-color:transparent;transform:rotate(8deg)}
+.exp-stamp{position:absolute;right:22px;bottom:18px;font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:rgba(139,30,25,.85);border:3px double rgba(139,30,25,.8);padding:3px 10px;transform:rotate(-9deg)}
+.exp-k{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#6b4a1c}
+.exp-t{display:block;font-family:var(--display);font-weight:700;font-size:21px;line-height:1.15;margin-top:6px;max-width:80%;color:#2a1d12}
+.exp-s{display:block;font-family:var(--serif);font-style:italic;font-size:14px;margin-top:6px;max-width:72%;color:#4a3518;border-bottom:1px solid rgba(90,60,20,.35);padding-bottom:8px}
+.exp-open{display:inline-block;margin-top:16px;font-family:var(--display);font-size:12px;letter-spacing:.18em;background:#2a1d12;color:#f0c75a;padding:7px 12px;border-radius:3px}
+.expediente.open .exp-cover{min-height:0;padding:10px 24px 10px;cursor:default;transform:none;border-radius:2px 8px 0 0;box-shadow:0 6px 14px rgba(0,0,0,.4)}
+.expediente.open .exp-cover .exp-s,.expediente.open .exp-cover .exp-open,.expediente.open .exp-cover .exp-clip{display:none}
+.expediente.open .exp-cover .exp-t{font-size:14px}.expediente.open .exp-cover .exp-stamp{font-size:10px;bottom:8px;right:14px}
+.expediente.open .exp-body{animation:sacar .55s ease-out}
+.expediente .exp-body>.paper{border-top-left-radius:0;border-top-right-radius:0}
+@keyframes sacar{from{opacity:0;transform:translateY(-24px) rotate(-1deg)}}
+
+.lock-note{margin-top:14px;font-family:var(--sans);font-size:13px;color:#e9b7b1;background:rgba(139,30,25,.18);border:1px dashed rgba(211,58,50,.6);border-radius:4px;padding:8px 12px}
+.lock-note.ok{color:#bfe3c9;background:rgba(47,122,79,.18);border-color:rgba(47,122,79,.7)}
+.options.locked .opt{filter:grayscale(.7);opacity:.5}
+.expediente.open .exp-cover .exp-k,.expediente.open .exp-cover .exp-t{display:none}
+.expediente.open .exp-cover{min-height:30px;padding:6px 24px}
+.expediente.open .exp-cover::after{content:"Expediente abierto";font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#6b4a1c}
+.escena p::first-letter{margin-right:6px}
