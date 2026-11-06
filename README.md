@@ -1,36 +1,35 @@
 # El Imperio del Algodón · La Ruta del Contrabando (1829)
 
 Experiencia web interactiva (scrolling story) del proyecto transmedia *El Imperio del Algodón*.
-Primero se muestra la portada de *The Southern Gazette* (se entra rompiendo el sello de cera). Luego el usuario elige personaje: **August** o **Gideon**, cada uno con 7 capítulos propios, examina gráficas y artefactos sobre una mesa de 1829 y toma decisiones que cambian el **riesgo** y los **fondos** de la red.
 
-## Estructura
+1. **Portada:** un ejemplar de *The Southern Gazette* (octubre de 1829). Se entra rompiendo el sello de cera.
+2. **Elección de personaje:** August (El Operativo) o Gideon (El Estratega).
+3. **7 capítulos por personaje**, con situaciones y decisiones distintas. Cada decisión cambia el **riesgo** y los **fondos** de la red; al final se genera el dossier con la insignia.
 
-```
-index.html          → página principal
-css/styles.css      → estilos (paleta, tipografías, diseño)
-js/data.js          → TODOS los textos, decisiones y cifras de las gráficas
-js/app.js           → lógica (capítulos, gráficas, HUD, inventario)
-vendor/             → Chart.js (librería de gráficas, incluida para no depender de internet)
-fonts/              → Cinzel, Lora e Inter
-assets/             → (opcional) august.jpg y gideon.jpg para los retratos del capítulo 00
-```
+## Archivos (todos en la raíz)
+
+| Archivo | Para qué sirve |
+|---|---|
+| `index.html` | Página principal y portada del periódico |
+| `styles.css` | Estilos (paleta, tipografías, diseño) |
+| `data.js` | **Todos los textos, decisiones y cifras de las gráficas.** `RUTA_AUGUST` y `RUTA_GIDEON` |
+| `app.js` | Lógica: capítulos, gráficas, HUD, inventario |
+| `mapa-sur.js` | Trazos del mapa de los estados del Sur |
+| `chart.umd.min.js` | Chart.js (librería de gráficas) |
+| `*.woff2` | Tipografías Cinzel, Lora e Inter |
+| `august.jpg`, `gideon.jpg` | Retratos de los personajes |
+| `august-cartel.jpg`, `grabado.jpg` | Imágenes de la portada del periódico |
 
 ## Cómo editar
 
-- **Cambiar un texto, una decisión o un número de una gráfica:** abre `js/data.js`. Los valores marcados con `aprox` son de referencia; reemplázalos por los del tablero *Registro de la Plantación 1820–1830*.
-- **Poner los retratos:** guarda las imágenes como `assets/august.jpg` y `assets/gideon.jpg`. Si no existen, se muestra un grabado de silueta.
+- **Textos, decisiones o números:** abre `data.js`. Las cifras de las gráficas vienen del tablero *Registro de la Plantación 1820–1830*.
+- **Imágenes:** reemplaza el archivo manteniendo el mismo nombre.
 
-## Publicar en GitHub Pages
+## Cómo actualizar la página
 
-1. Entra a GitHub con la cuenta **JuanGonzalezAr**.
-2. Crea un repositorio nuevo (por ejemplo `ImperioDelAlgodon`), público.
-3. En el repositorio: **Add file → Upload files**. Arrastra **todo el contenido** de esta carpeta (no la carpeta en sí: `index.html` tiene que quedar en la raíz). Pulsa **Commit changes**.
-4. Ve a **Settings → Pages**. En *Build and deployment* elige **Deploy from a branch**, rama **main** y carpeta **/(root)**. Guarda.
-5. Espera 1–2 minutos. La página queda en `https://juangonzalezar.github.io/ImperioDelAlgodon/`.
-
-> Si prefieres usar el repositorio existente `VisualizacionDeInformacion`, sube esta carpeta dentro de una subcarpeta (por ejemplo `experiencia/`) para no reemplazar el `index.html` que ya está ahí. Quedaría en `https://juangonzalezar.github.io/VisualizacionDeInformacion/experiencia/`.
+En el repositorio: **Add file → Upload files**, arrastra los archivos que cambiaron y pulsa **Commit changes**. GitHub Pages publica la nueva versión en 1–2 minutos en <https://juangonzalezar.github.io/ImperioDelAlgodon/>.
 
 ## Notas
 
-- La votación del capítulo 07 y el progreso se guardan en el navegador de cada persona (no hay servidor).
+- El progreso y la votación del capítulo 07 se guardan en el navegador de cada persona (no hay servidor).
 - "Exportar registro" abre la impresión del navegador para guardar el dossier como PDF.

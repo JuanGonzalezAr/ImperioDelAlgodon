@@ -93,7 +93,7 @@ function retrato(clave) {
     <svg viewBox="0 0 200 260" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%"><defs><pattern id="hatch-${clave}" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="4" stroke="#6b5236" stroke-width="1"/></pattern></defs>
       <rect width="200" height="260" fill="#d9c7a2"/><path d="M100 60c26 0 40 22 38 46-2 22-14 36-38 36s-36-14-38-36c-2-24 12-46 38-46z" fill="url(#hatch-${clave})"/>
       <path d="M30 260c4-54 34-84 70-84s66 30 70 84z" fill="url(#hatch-${clave})"/></svg>
-    <img src="${clave}.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:sepia(.5)" onerror="this.remove()">
+    <img src="${clave}.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%;filter:sepia(.12)" onerror="this.remove()">
     <span style="position:absolute;left:10px;top:8px;font-family:var(--display);color:#3a2a1a">${ALIADOS[clave].ficha}</span></div>`;
 }
 function cap0() {
@@ -525,6 +525,9 @@ function actualizarHUD() {
   const juntos = estado.decisiones[3] !== undefined, g = estado.aliado === 'gideon';
   $('#allyName').textContent = !estado.aliado ? 'Elige a tu aliado' : juntos ? (g ? 'Gideon & August' : 'August & Gideon') : (g ? 'Gideon' : 'August');
   $('#allySeal').textContent = !estado.aliado ? '?' : juntos ? (g ? 'G·A' : 'A·G') : (g ? 'G' : 'A');
+  const sello = $('#allySeal');
+  if (estado.aliado) { sello.style.backgroundImage = `url(${estado.aliado}.jpg)`; sello.style.backgroundSize = 'cover'; sello.style.backgroundPosition = '50% 15%'; sello.textContent = ''; sello.title = juntos ? (g ? 'G·A' : 'A·G') : ''; }
+  else { sello.style.backgroundImage = ''; }
 }
 function riel() {
   const gearPath = (() => { let d = ''; const n = 10; for (let i = 0; i < n * 2; i++) { const a = i / (n * 2) * 2 * Math.PI, r = i % 2 ? 15 : 20; d += `${i ? 'L' : 'M'}${(22 + r * Math.cos(a)).toFixed(1)} ${(22 + r * Math.sin(a)).toFixed(1)} `; } return d + 'Z'; })();
