@@ -1,7 +1,7 @@
 # El Imperio del Algodón · La Ruta del Contrabando (1829)
 
 Experiencia web interactiva (scrolling story) del proyecto transmedia *El Imperio del Algodón*.
-El usuario acompaña a August por 8 capítulos, examina gráficas y artefactos sobre una mesa de 1829 y toma decisiones que cambian el **riesgo** y los **fondos** de la red.
+Primero se muestra la portada de *The Southern Gazette* (se entra rompiendo el sello de cera). Luego el usuario elige personaje: **August** o **Gideon**, cada uno con 7 capítulos propios, examina gráficas y artefactos sobre una mesa de 1829 y toma decisiones que cambian el **riesgo** y los **fondos** de la red.
 
 ## Estructura
 

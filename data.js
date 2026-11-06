@@ -61,7 +61,7 @@ const DATOS = {
    "Rutas y toma de decisiones". La otra es la alternativa.
    riesgo y fondos son los CAMBIOS que produce cada opción.
    ========================================================== */
-const CAPITULOS = [
+const RUTA_AUGUST = [
   { id: 0, titulo: 'El Despacho Clandestino', corto: 'Elección de aliado' },
   {
     id: 1, titulo: 'El Yugo en Oak Ridge', corto: 'El yugo',
@@ -176,6 +176,144 @@ const CAPITULOS = [
     ]
   }
 ];
+
+
+/* ==========================================================
+   RUTA DE GIDEON (El Estratega) · 7 capítulos propios
+   Usa las mismas gráficas con situaciones distintas.
+   "v" ajusta los textos y datos de las gráficas de cada capítulo.
+   ========================================================== */
+const RUTA_GIDEON = [
+  { id: 0, titulo: 'El Despacho Clandestino', corto: 'Elección de aliado' },
+  {
+    id: 1, titulo: 'Las Sombras del Muelle', corto: 'Muelle',
+    lugar: 'Callejón del Humo · puerto fluvial, septiembre de 1829',
+    sub: 'Diez años vendiendo lo que el imperio pierde.',
+    testimonio: 'Los terratenientes ponen precio a mi cabeza: me llaman «El Fantasma del Río». Para seguir moviendo mercancía necesito el registro de cargamentos que el aduanero guarda en su oficina del muelle.',
+    nota: 'El aduanero cambia de guardia de madrugada; durante unos minutos la oficina queda sola.',
+    hechos: [['Lugar', 'Oficina de aduanas'], ['Ventana', '12 minutos'], ['Objetivo', 'Registro de cargas']],
+    firma: 'Gideon',
+    pregunta: '¿Cómo consigue Gideon el registro de cargamentos?',
+    analisis: 'Libro de inspecciones del muelle: la barra de las 4:00 a. m. marca la menor cantidad de guardias.',
+    v: { kicker: 'Libro de inspecciones del muelle · vol. II', titulo: 'Guardias de aduana en el muelle', minimo: '4:00 a. m.',
+         nota: '⧗ En el cambio de guardia de la madrugada solo quedan 2 vigilantes: una ventana de 12 minutos.',
+         serie: { horas: ['20:00', '22:00', '00:00', '02:00', '04:00', '06:00'], valores: [8, 10, 7, 6, 2, 9], minimo: 4 } },
+    opciones: [
+      { letra: 'A', texto: 'Copiar el registro durante el cambio de guardia de las 4:00 a. m.', riesgo: 5, fondos: 0, elegida: true,
+        resultado: 'Copia limpia: ahora sabe qué barcazas llevan el algodón de Oak Ridge.' },
+      { letra: 'B', texto: 'Sobornar al escribano de la aduana', riesgo: 15, fondos: -50,
+        resultado: 'Consigue el registro, pero el escribano ya sabe quién lo pidió.' }
+    ]
+  },
+  {
+    id: 2, titulo: 'La Noche de las Barcazas', corto: 'Barcazas',
+    lugar: 'Canal del muelle · madrugada',
+    sub: 'El río no perdona a quien llega tarde.',
+    testimonio: 'Dos barcazas con algodón interceptado esperan salir al Norte. El aduanero cerró el acceso al canal con un candado y sus guardias revisan los manifiestos en la entrada.',
+    nota: 'El agua golpea las estacas; la lluvia fina cubre el ruido de los remos.',
+    hechos: [['Barcazas', '2'], ['Carga', 'Algodón interceptado'], ['Obstáculo', 'El aduanero']],
+    firma: 'Gideon',
+    pregunta: '¿Cómo libera Gideon las barcazas?',
+    analisis: 'La bitácora del trayecto marca 8 sobre 10 en el paso de la aduana: es el punto crítico de la noche.',
+    v: { reloj: 'EL RELOJ DEL MUELLE', kicker: 'Bitácora de Gideon · trayecto fluvial', titulo: 'Riesgo en la ruta de las barcazas',
+         sub: 'Nivel de riesgo de 1 a 10 en cada punto de la noche', ayuda: 'Gira las manecillas: recorre la noche en el río.',
+         etapas: [
+           { hora: 0, nombre: 'Sótano del Callejón', riesgo: 3, texto: 'Gideon reúne a los estibadores en el sótano de la distribuidora de grano.' },
+           { hora: 3, nombre: 'Muelle de carga', riesgo: 6, texto: 'Las barcazas cargadas esperan escondidas entre los botes de pesca.' },
+           { hora: 6, nombre: 'Paso de la aduana', riesgo: 8, texto: 'El aduanero cerró el canal: es el punto más vigilado de la noche.' },
+           { hora: 9, nombre: 'Canal secundario', riesgo: 4, texto: 'Lejos de la vista de la aduana, el riesgo baja a 4.' },
+           { hora: 12, nombre: 'Bahía', riesgo: 2, texto: 'Las barcazas desaparecen en la niebla rumbo al Norte.' }
+         ] },
+    opciones: [
+      { letra: 'A', texto: 'Usar las señas del muelle para provocar una falsa pelea y soltar las amarras a oscuras', riesgo: 10, fondos: 150, elegida: true,
+        resultado: 'Los guardias se distraen, las cadenas se liberan y las barcazas desaparecen en la niebla del río.' },
+      { letra: 'B', texto: 'Sobornar al jefe de aduanas con monedas del mercado negro', riesgo: 35, fondos: -50,
+        resultado: 'El trato era una trampa: suena la alarma y Gideon escapa por poco, dejando atrás una barcaza.' }
+    ]
+  },
+  {
+    id: 3, titulo: 'El Hermano Perdido', corto: 'Hermano',
+    lugar: 'Sótano de la distribuidora de grano · Callejón del Humo',
+    sub: 'Diez años después, la sangre vuelve a tocar la puerta.',
+    testimonio: 'Un fugitivo de Oak Ridge pregunta por mí en las tabernas. Es August, mi hermano menor. Dice que conoce los horarios de las carretas y los nombres de los capataces corruptos.',
+    nota: 'Despliego mi mapa de cuero sobre la mesa: rutas, mareas y patrullas anotadas a mano. Si unimos lo que sabemos, podemos golpear al Rey Algodón.',
+    hechos: [['Llega', 'August'], ['Trae', 'Horarios y nombres'], ['Peligro', 'Lo buscan']],
+    firma: 'Gideon',
+    pregunta: '¿Qué hace Gideon con su hermano?',
+    analisis: 'El mapa de cuero: los caminos terrestres tienen 70 % de patrullas y los canales secundarios solo 20 %. Con los horarios de August, los canales se pueden usar cada noche.',
+    opciones: [
+      { letra: 'A', texto: 'Unir a August a la red y mover el primer cargamento por los canales secundarios', riesgo: 10, fondos: 150, elegida: true,
+        resultado: 'Los hermanos sellan la alianza. La primera entrega llega al puerto sin alertar a nadie.' },
+      { letra: 'B', texto: 'Darle dinero a August y mandarlo solo al Norte para proteger la red', riesgo: 5, fondos: -50,
+        resultado: 'La red sigue a salvo, pero pierde la información que solo August conocía.' }
+    ]
+  },
+  {
+    id: 4, titulo: 'El Precio del Silencio', corto: 'Precio',
+    lugar: 'Taberna del muelle · mesa de negociación',
+    sub: 'Quien controla el precio, controla el puerto.',
+    testimonio: 'Los grandes terratenientes controlan el 70 % del mercado; nuestra red apenas mueve el 10 %. Un comerciante del Norte ofrece comprar todo lo que interceptemos, pero quiere la carga completa de una sola vez.',
+    nota: 'The Southern Gazette publica la recompensa por «El Fantasma del Río». Cada venta grande deja rastro.',
+    hechos: [['Fardos', '50'], ['Comprador', 'Comerciante del Norte'], ['Testigo', 'August']],
+    firma: 'Gideon',
+    pregunta: '¿A quién le vende Gideon el algodón?',
+    analisis: 'La carta mercantil: el precio cayó de 17 a 9,3 ¢ por libra entre 1820 y 1829, y la red solo controla el 10 % del mercado.',
+    opciones: [
+      { letra: 'A', texto: 'Venderle todo de una vez al comerciante del Norte', riesgo: 20, fondos: 300,
+        resultado: 'Gran ganancia, pero la venta llama la atención de los informantes del sheriff.' },
+      { letra: 'B', texto: 'Vender en partidas pequeñas a comerciantes independientes', riesgo: 5, fondos: 150, elegida: true,
+        resultado: 'Ganancias constantes y perfil bajo: la red puede comprar botes sin levantar sospechas.' }
+    ]
+  },
+  {
+    id: 5, titulo: 'Lo que Esconde el Reloj', corto: 'Reloj',
+    lugar: 'Mesa del relojero · Callejón del Humo',
+    sub: 'August trajo algo más que su libertad: el reloj del capataz.',
+    pregunta: '¿Qué hace Gideon con las coordenadas?',
+    analisis: 'Al cruzar las coordenadas del reloj (32.31° N, 86.90° O) con su mapa de cuero, Gideon reconoce un punto ciego en la bahía que la marina no patrulla.',
+    opciones: [
+      { letra: 'A', texto: 'Mover esta misma noche las barcazas y los botes al punto ciego', riesgo: -10, fondos: 0, elegida: true,
+        resultado: 'La Red del Río tiene por fin un puerto seguro propio.' },
+      { letra: 'B', texto: 'Enviar primero a un explorador y esperar una semana', riesgo: 5, fondos: 0,
+        resultado: 'El punto se confirma, pero la semana de espera deja los botes expuestos en el muelle.' }
+    ]
+  },
+  {
+    id: 6, titulo: 'La Compuerta del Canal', corto: 'Compuerta',
+    lugar: 'Almacén Central de Acopio · distrito del río',
+    sub: 'Mientras August pelea, alguien tiene que abrir la salida.',
+    testimonio: 'El capataz acorraló a August entre los fardos en llamas. Yo estoy junto a la compuerta del canal: está trabada y el humo no deja ver.',
+    nota: 'Si la abro, el agua entra y frena el fuego, pero el barco de la aduana verá la luz.',
+    hechos: [['Fuego', '68 %'], ['August', 'Acorralado'], ['Salida', 'La compuerta']],
+    firma: 'Gideon',
+    pregunta: '¿Cómo saca Gideon a su hermano del almacén?',
+    analisis: 'El plano indica que la salida principal colapsa en menos de 3 minutos; la compuerta del canal es la única salida accesible.',
+    v: { marca: 'G' },
+    opciones: [
+      { letra: 'A', texto: 'Forzar la compuerta con una palanca y esperar a August en el bote', riesgo: 15, fondos: 0, elegida: true,
+        resultado: 'La compuerta cede; August vence al capataz con las cadenas y ambos escapan por el canal antes del colapso.' },
+      { letra: 'B', texto: 'Distraer a los cazadores prendiendo fuego al muelle de carga', riesgo: 30, fondos: 0,
+        resultado: 'Los cazadores se dispersan, pero el incendio se extiende y la red pierde su almacén.' }
+    ]
+  },
+  {
+    id: 7, titulo: 'El Destino Final de la Red', corto: 'Dossier',
+    lugar: 'Muelle al amanecer',
+    sub: 'Gideon tiene dinero, botes y a su hermano de vuelta. Falta decidir qué hacer con ellos.',
+    pregunta: '¿Huir al Norte con los fondos o quedarse a liderar la Red?',
+    analisis: 'Balance de la travesía: el riesgo está controlado y más de 40 familias esperan ser evacuadas por el río.',
+    opciones: [
+      { letra: 'A', texto: 'Tomar los fondos y huir al Norte con August', riesgo: 0, fondos: 0, insignia: 'Contrabandista Retirado',
+        resultado: 'Los hermanos llegan a la libertad. En el Sur, las familias siguen esperando.' },
+      { letra: 'B', texto: 'Quedarse en el Sur y fundar con August la Red del Río', riesgo: 0, fondos: 0, elegida: true,
+        insignia: 'Estratega del Río y Cofundador de la Red',
+        resultado: 'Los barcos del imperio empiezan a llevar familias hacia el Norte.' }
+    ]
+  }
+];
+
+const RUTAS = { august: RUTA_AUGUST, gideon: RUTA_GIDEON };
+let CAPITULOS = RUTA_AUGUST; // cambia según el aliado elegido
 
 const ALIADOS = {
   august: { nombre: 'August', rol: 'El Operativo', ficha: '017',

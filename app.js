@@ -34,6 +34,7 @@ const ejes = (extraY = {}, extraX = {}) => ({
 });
 
 /* ---------- Utilidades de interfaz ---------- */
+const dinero = v => (v < 0 ? '−$' : '+$') + Math.abs(v);
 function tabla(cabeceras, filas) {
   return `<table class="data-table"><thead><tr>${cabeceras.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${
     filas.map(f => `<tr>${f.map((c, i) => `<td class="${i ? 'n' : ''}">${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
@@ -71,7 +72,7 @@ function dilema(c) {
     <div class="options">${c.opciones.map((o, i) => `
       <button class="opt ${elegida === i ? 'chosen' : ''}" data-cap="${c.id}" data-opt="${i}" ${elegida !== undefined ? 'disabled' : ''}>
         <span class="tag">OPCIÓN ${o.letra}</span><span class="txt">${o.texto}</span>
-        <span class="cost">Riesgo ${o.riesgo > 0 ? '+' : ''}${o.riesgo} %${o.fondos ? ` · Fondos +$${o.fondos}` : ''}</span>
+        <span class="cost">Riesgo ${o.riesgo > 0 ? '+' : ''}${o.riesgo} %${o.fondos ? ` · Fondos ${dinero(o.fondos)}` : ''}</span>
       </button>`).join('')}</div>
     <div class="outcome" id="out-${c.id}"></div>
     ${c.id < 7 ? `<a class="next" href="#cap${c.id + 1}">Continuar al capítulo ${String(c.id + 1).padStart(2, '0')} →</a>` : ''}
@@ -106,7 +107,7 @@ function cap0() {
         <div class="note" style="margin-top:12px;letter-spacing:.15em">RASGOS</div>
         ${a.rasgos.map(r => `<div style="display:flex;align-items:center;gap:8px;font-family:var(--sans);font-size:12px;margin-top:6px"><span style="width:110px">${r[0]}</span><span style="flex:1;height:5px;background:#d9c9a8;border-radius:3px"><span style="display:block;height:100%;width:${r[1]}%;background:#a8782a;border-radius:3px"></span></span><b>${r[1]}</b></div>`).join('')}
         <div style="margin-top:16px;font-family:var(--display);font-size:12px;letter-spacing:.15em;background:linear-gradient(180deg,#e2b443,#b8892a);color:#2a1d12;padding:10px 12px;border-radius:3px">Elegir a ${a.nombre} y empezar →</div>
-        ${k === 'gideon' ? '<div class="soon">La ruta de Gideon está en desarrollo: por ahora la travesía sigue el modo August.</div>' : ''}
+        <div class="soon">${k === 'august' ? '7 capítulos: la fuga de Oak Ridge hasta el puerto.' : '7 capítulos: el contrabando en el muelle y el reencuentro con August.'}</div>
       </div></button>`;
   };
   const s = seccion(0, `
@@ -114,14 +115,14 @@ function cap0() {
       <div class="ch-num">CAPÍTULO 00 · REGISTRO DE ENTRADA</div>
       <h1 id="cap0t" style="font-family:var(--display);font-size:clamp(34px,6vw,64px);color:#f3e6cb;letter-spacing:.06em;line-height:1.05;margin-top:10px">El Imperio del Algodón</h1>
       <div style="font-family:var(--display);color:var(--laton);letter-spacing:.35em;margin-top:8px">LA RUTA DEL CONTRABANDO · 1829</div>
-      <p style="font-style:italic;color:#c9b693;max-width:640px;margin:14px auto 0">Entra en las arterias ocultas del Sur. Examina documentos, artefactos y mapas sobre esta mesa: cada gráfica es una prueba de inteligencia. Elige a tu compañero para empezar la travesía de 8 capítulos.</p>
+      <p style="font-style:italic;color:#c9b693;max-width:640px;margin:14px auto 0">Entra en las arterias ocultas del Sur. Examina documentos, artefactos y mapas sobre esta mesa: cada gráfica es una prueba de inteligencia. Elige a tu personaje: cada uno vive 7 capítulos distintos.</p>
     </div>
     <div class="dilemma" style="margin-bottom:18px"><div class="k">DECISIÓN 00 · ELECCIÓN DE ALIADO</div><div class="q" style="margin-bottom:0">¿Quién llevará el registro?</div></div>
     <div class="desk"><div class="span-6">${card('august')}</div><div class="span-6">${card('gideon')}</div></div>
-    <p class="note" style="margin-top:14px;color:#9c8866">Aviso confidencial: tu aliado define los diálogos, artefactos y rutas de escape disponibles. Puedes reiniciar la travesía al final.</p>`);
+    <p class="note" style="margin-top:14px;color:#9c8866">Aviso confidencial: cada personaje tiene su propia travesía de 7 capítulos, con situaciones y decisiones distintas. Puedes cambiar de personaje cuando quieras (se reinicia la travesía).</p>`);
   $$('.dossier', s).forEach(b => b.addEventListener('click', () => {
-    estado.aliado = 'august'; // por ahora solo existe el modo August
-    estado.aliadoElegido = b.dataset.aliado;
+    const k = b.dataset.aliado;
+    if (estado.aliado !== k) { estado.aliado = k; estado.decisiones = {}; recalcular(); construirRuta(); }
     guardar(); $$('.dossier', s).forEach(x => x.classList.toggle('selected', x === b));
     actualizarHUD();
     document.getElementById('cap1').scrollIntoView();
@@ -132,14 +133,14 @@ function cap0() {
    CAPÍTULO 01 · Libro de contabilidad
    ========================================================== */
 function cap1() {
-  const c = CAPITULOS[1], g = DATOS.guardias, h = DATOS.horasTrabajo, q = DATOS.cuotas;
+  const c = CAPITULOS[1], v = c.v || {}, g = v.serie || DATOS.guardias, h = DATOS.horasTrabajo, q = DATOS.cuotas;
   seccion(1, `${cabecera(c)}
     <div class="desk">
       <div class="span-5">${testimonio(c)}</div>
-      <div class="span-7">${tarjetaViz({ id: 'chGuardias', kicker: 'Libro de contabilidad de Oak Ridge · vol. IV', titulo: 'Turnos de guardia en la plantación',
-        sub: 'Guardias activos por franja horaria', kpis: [{ l: 'Cuota promedio', v: q.promedio + ' lb' }, { l: 'Guardias activos', v: Math.max(...g.valores) }, { l: 'Mínima vigilancia', v: '2:00 p. m.', alerta: true }],
+      <div class="span-7">${tarjetaViz({ id: 'chGuardias', kicker: v.kicker || 'Libro de contabilidad de Oak Ridge · vol. IV', titulo: v.titulo || 'Turnos de guardia en la plantación',
+        sub: 'Guardias activos por franja horaria', kpis: [{ l: 'Cuota promedio', v: q.promedio + ' lb' }, { l: 'Guardias activos', v: Math.max(...g.valores) }, { l: 'Mínima vigilancia', v: v.minimo || '2:00 p. m.', alerta: true }],
         tablaHTML: tabla(['Hora', 'Guardias'], g.horas.map((x, i) => [x, g.valores[i]])),
-        nota: '⧗ La cobertura más baja es durante el cambio de turno de la tarde: una ventana de 17 minutos.' })}</div>
+        nota: v.nota || '⧗ La cobertura más baja es durante el cambio de turno de la tarde: una ventana de 17 minutos.' })}</div>
       <div class="span-5">${tarjetaViz({ id: 'chCuotas', kicker: 'Anexo · Registro de la Plantación', titulo: 'Cuotas de cosecha diaria', sub: 'Libras de algodón pizcado por persona al día',
         cuerpo: `<div class="stats"><div class="stat alert"><span>Límite de castigo</span><b>${q.castigo}</b><span>lb</span></div><div class="stat"><span>Promedio real</span><b>${q.promedio}</b><span>lb</span></div><div class="stat"><span>Máxima explotación</span><b>${q.maxima}</b><span>lb</span></div></div>
         <p class="note" style="margin-top:10px">Quien no llegaba a ${q.castigo} lb era castigado; la vida se medía en fardos.</p>` })}</div>
@@ -176,17 +177,17 @@ function relojSVG() {
       <circle cx="100" cy="100" r="5" fill="#2a1d12"/></g></svg>`;
 }
 function cap2() {
-  const c = CAPITULOS[2], E = DATOS.etapas;
+  const c = CAPITULOS[2], v = c.v || {}, E = v.etapas || DATOS.etapas;
   seccion(2, `${cabecera(c)}
     <div class="desk">
       <div class="span-4"><div class="dilemma watch-wrap" style="height:100%">
-        <div class="k">EL RELOJ DEL CAPATAZ</div>${relojSVG()}
+        <div class="k">${v.reloj || 'EL RELOJ DEL CAPATAZ'}</div>${relojSVG()}
         <div class="hour-read" id="hourRead">Hora 0 · 00:00</div>
         <label class="sr-only" for="hourSlider">Hora del trayecto</label>
         <input id="hourSlider" class="hour-slider" type="range" min="0" max="12" step="3" value="0">
-        <p class="note" style="color:#c9b693;text-align:center">Gira las manecillas: recorre las 12 horas del trayecto.</p></div></div>
-      <div class="span-8">${tarjetaViz({ id: 'chRiesgoHora', kicker: 'Registro de la Plantación · trayecto', titulo: 'Riesgo en el trayecto de transporte fluvial',
-        sub: 'Nivel de riesgo de 1 a 10 en cada etapa, de la plantación al puerto', kpis: [{ l: 'Hora', v: '00:00', id: 'kHora' }, { l: 'Riesgo', v: E[0].riesgo + ' / 10', id: 'kRiesgo' }, { l: 'Etapa', v: E[0].nombre, id: 'kEtapa', alerta: true, peq: true }],
+        <p class="note" style="color:#c9b693;text-align:center">${v.ayuda || 'Gira las manecillas: recorre las 12 horas del trayecto.'}</p></div></div>
+      <div class="span-8">${tarjetaViz({ id: 'chRiesgoHora', kicker: v.kicker || 'Registro de la Plantación · trayecto', titulo: v.titulo || 'Riesgo en el trayecto de transporte fluvial',
+        sub: v.sub || 'Nivel de riesgo de 1 a 10 en cada etapa, de la plantación al puerto', kpis: [{ l: 'Hora', v: '00:00', id: 'kHora' }, { l: 'Riesgo', v: E[0].riesgo + ' / 10', id: 'kRiesgo' }, { l: 'Etapa', v: E[0].nombre, id: 'kEtapa', alerta: true, peq: true }],
         tablaHTML: tabla(['Hora', 'Etapa', 'Riesgo (1–10)'], E.map(e => [`Hora ${e.hora}`, e.nombre, e.riesgo])),
         nota: '<span id="kTexto">' + E[0].texto + '</span>' })}</div>
       <div class="span-12">${testimonio(c)}</div>
@@ -382,7 +383,7 @@ function cap5() {
 /* ==========================================================
    CAPÍTULO 06 · Plano del almacén + mapa de producción
    ========================================================== */
-function planoSVG() {
+function planoSVG(marca = 'A') {
   // zonas: [x,y,w,h,nombre,intensidad 0-4]
   const zonas = [[20, 20, 150, 110, 'Bodega de algodón', 3], [170, 20, 180, 70, 'Piso central', 2], [350, 20, 170, 110, 'Muelle de carga', 1],
     [20, 130, 150, 120, 'Fardos en llamas', 4], [170, 90, 180, 160, 'Oficina de registro', 3], [350, 130, 100, 120, 'Compuerta del canal', 0], [450, 130, 70, 120, '', 0]];
@@ -391,7 +392,7 @@ function planoSVG() {
       <text x="${x + 10}" y="${y + 22}" font-family="Cinzel" font-size="12" fill="#2a1d12">${n}</text></g>`).join('')}
     <path d="M90 200 C150 180 230 210 300 200 S380 190 470 190" stroke="#D2A334" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="1 9"/>
     <path d="M90 200 C140 120 260 80 430 60" stroke="#8B1E19" stroke-width="3" fill="none" stroke-dasharray="6 5"/>
-    <circle cx="90" cy="200" r="11" fill="#D2A334" stroke="#2a1d12" stroke-width="2"/><text x="85" y="205" font-family="Cinzel" font-size="12">A</text>
+    <circle cx="90" cy="200" r="11" fill="#D2A334" stroke="#2a1d12" stroke-width="2"/><text x="85" y="205" font-family="Cinzel" font-size="12">${marca}</text>
     <circle cx="430" cy="60" r="10" fill="#8B1E19"/><circle cx="480" cy="190" r="11" fill="#2f7a4f"/>
     <text x="410" y="262" font-family="Inter" font-size="10" fill="#2a1d12">● salida al canal</text></svg>
     <div class="legend"><span><i style="background:#D2A334"></i>Ruta de escape</span><span><i style="background:#8B1E19"></i>Salida principal (bloqueada)</span><span><i style="background:#2f7a4f"></i>Compuerta del canal</span></div>
@@ -420,7 +421,7 @@ function cap6() {
       <div class="span-5">${testimonio(c)}</div>
       <div class="span-7">${tarjetaViz({ id: 'plano', kicker: 'Plano de emergencia · Almacén C', titulo: 'Propagación del fuego y salidas al canal',
         kpis: [{ l: 'Fuego', v: '68 %', alerta: true }, { l: 'Salida principal', v: 'Bloqueada', alerta: true }, { l: 'Compuerta del canal', v: 'Accesible' }],
-        cuerpo: planoSVG(), nota: '⚑ La salida principal colapsa en menos de 3 minutos.' })}</div>
+        cuerpo: planoSVG((c.v || {}).marca), nota: '⚑ La salida principal colapsa en menos de 3 minutos.' })}</div>
       <div class="span-8">${tarjetaViz({ id: 'mapaSur', kicker: 'Registro de la Plantación · geografía', titulo: 'Producción de algodón y ruta de escape',
         sub: 'Producción por estado (escala 45–150) y riesgo en cada etapa de la ruta. Toca una etapa.', cuerpo: mapaSur(),
         tablaHTML: tabla(['Estado', 'Producción'], Object.entries(P).sort((a, b) => b[1] - a[1]).map(([k, v]) => [nom[k], v])) })}</div>
@@ -474,7 +475,7 @@ function pintarDossier() {
   const { R, F } = serie(); const labels = ['00', '01', '02', '03', '04', '05', '06', '07'];
   const d7 = estado.decisiones[7];
   let ins = d7 !== undefined ? CAPITULOS[7].opciones[d7].insignia : null;
-  if (ins && d7 === 1 && estado.fondos >= 500) ins = 'Infiltrado Comercial y Liberador del Río';
+  if (ins && estado.aliado !== 'gideon' && d7 === 1 && estado.fondos >= 500) ins = 'Infiltrado Comercial y Liberador del Río';
   if (ins && estado.riesgo >= 60) ins = 'Fugitivo Temerario';
   $('#badge').innerHTML = `<div class="badge"><svg class="medal" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#8B1E19"/><circle cx="50" cy="50" r="36" fill="none" stroke="#f3e6cb" stroke-width="2" stroke-dasharray="3 3"/>
     <g fill="#f7f1e3"><circle cx="50" cy="40" r="9"/><circle cx="41" cy="50" r="9"/><circle cx="59" cy="50" r="9"/><circle cx="50" cy="57" r="9"/></g></svg>
@@ -515,15 +516,15 @@ function mostrarResultado(capId) {
   const o = CAPITULOS[capId].opciones[d], bueno = !!o.elegida, out = $('#out-' + capId);
   out.className = 'outcome show ' + (bueno ? 'good' : 'bad');
   out.innerHTML = `<span class="stamp">${bueno ? 'SIN SOSPECHAS' : 'ALERTA'}</span><b>Opción ${o.letra}.</b> ${o.resultado}
-    <div class="delta">Riesgo ${o.riesgo > 0 ? '+' : ''}${o.riesgo} % · Fondos ${o.fondos ? '+$' + o.fondos : 'sin cambio'} → Riesgo total ${estado.riesgo} % · Fondos $${estado.fondos}</div>`;
+    <div class="delta">Riesgo ${o.riesgo > 0 ? '+' : ''}${o.riesgo} % · Fondos ${o.fondos ? dinero(o.fondos) : 'sin cambio'} → Riesgo total ${estado.riesgo} % · Fondos $${estado.fondos}</div>`;
 }
 function actualizarHUD() {
   $('#riskVal').textContent = estado.riesgo + ' %';
   $('#riskFill').style.width = Math.min(100, estado.riesgo) + '%';
   $('#fundsVal').textContent = '$' + estado.fondos;
-  const juntos = estado.decisiones[3] !== undefined;
-  $('#allyName').textContent = estado.aliado ? (juntos ? 'August & Gideon' : 'August') : 'Elige a tu aliado';
-  $('#allySeal').textContent = estado.aliado ? (juntos ? 'A·G' : 'A') : '?';
+  const juntos = estado.decisiones[3] !== undefined, g = estado.aliado === 'gideon';
+  $('#allyName').textContent = !estado.aliado ? 'Elige a tu aliado' : juntos ? (g ? 'Gideon & August' : 'August & Gideon') : (g ? 'Gideon' : 'August');
+  $('#allySeal').textContent = !estado.aliado ? '?' : juntos ? (g ? 'G·A' : 'A·G') : (g ? 'G' : 'A');
 }
 function riel() {
   const gearPath = (() => { let d = ''; const n = 10; for (let i = 0; i < n * 2; i++) { const a = i / (n * 2) * 2 * Math.PI, r = i % 2 ? 15 : 20; d += `${i ? 'L' : 'M'}${(22 + r * Math.cos(a)).toFixed(1)} ${(22 + r * Math.sin(a)).toFixed(1)} `; } return d + 'Z'; })();
@@ -564,12 +565,39 @@ function hover(el, texto) {
 }
 function alertaSuave(t) { tip.textContent = t; tip.style.display = 'block'; tip.style.left = '50%'; tip.style.top = '80px'; setTimeout(() => tip.style.display = 'none', 1600); }
 
+/* ---------- Portada (periódico) ---------- */
+function portada() {
+  const el = $('#portada'); if (!el) return;
+  document.body.classList.add('gz-open');
+  const entrar = () => {
+    $('#sealBtn').classList.add('broken');
+    setTimeout(() => { el.classList.add('hide'); document.body.classList.remove('gz-open'); window.scrollTo(0, 0); }, 450);
+    setTimeout(() => el.remove(), 1400);
+  };
+  $('#sealBtn').addEventListener('click', entrar);
+}
+
+/* ---------- Construcción de la ruta según el personaje ---------- */
+function construirRuta() {
+  CAPITULOS = RUTAS[estado.aliado] || RUTAS.august;
+  for (let i = 1; i <= 7; i++) {
+    const old = document.getElementById('cap' + i); if (!old) continue;
+    old.querySelectorAll('canvas').forEach(cv => { const ch = Chart.getChart(cv); if (ch) ch.destroy(); });
+    old.remove();
+  }
+  chRF = chFF = null; $('#veil').style.display = 'none';
+  cap1(); cap2(); cap3(); cap4(); cap5(); cap6(); cap7();
+  Object.keys(estado.decisiones).forEach(k => mostrarResultado(+k));
+  riel();
+}
+
 /* ---------- Arranque ---------- */
+CAPITULOS = RUTAS[estado.aliado] || RUTAS.august;
 cap0(); cap1(); cap2(); cap3(); cap4(); cap5(); cap6(); cap7();
 story.addEventListener('click', e => {
   const b = e.target.closest('.opt'); if (b && !b.disabled) decidir(+b.dataset.cap, +b.dataset.opt);
   const t = e.target.closest('.toggle-table'); if (t) { const tb = $('#' + t.dataset.for + ' .data-table'); tb.classList.toggle('show'); t.textContent = tb.classList.contains('show') ? 'Ocultar tabla' : 'Ver tabla'; }
 });
 Object.keys(estado.decisiones).forEach(k => mostrarResultado(+k));
-recalcular(); actualizarHUD(); riel(); inventario();
+recalcular(); actualizarHUD(); riel(); inventario(); portada();
 })();
