@@ -413,3 +413,5 @@ body.gz-open{overflow:hidden}
 .r3d-labels.izq .r3d-tag::before{margin-left:0;margin-right:-3.5px}
 .r3d-labels.izq .r3d-tag i{margin-left:0;margin-right:14px}
 .r3d-labels.izq .r3d-tag i::before{right:auto;left:100%}
+
+.r3d-tools[hidden]{display:none}
