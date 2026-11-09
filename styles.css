@@ -369,3 +369,47 @@ body.gz-open{overflow:hidden}
 .expediente.open .exp-cover{min-height:30px;padding:6px 24px}
 .expediente.open .exp-cover::after{content:"Expediente abierto";font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#6b4a1c}
 .escena p::first-letter{margin-right:6px}
+
+/* ---------- v6 · visor 3D del reloj ---------- */
+.r3d-stage{position:relative;width:100%;height:520px;margin-top:12px;border:1px solid var(--linea);border-radius:4px;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 40%,#f6ecd6 0%,#e7d6b1 55%,#cdb685 100%);touch-action:none}
+.r3d-stage .mech{position:absolute;inset:0;margin:auto;height:100%;max-width:440px}
+.r3d-stage.r3d-on .mech{display:none}
+.r3d-stage.r3d-off{height:auto;background:none;border:0}
+.r3d-stage.r3d-off .mech{position:static}
+.r3d-canvas{position:absolute;inset:0;width:100%!important;height:100%!important;display:block;cursor:grab}
+.r3d-canvas:active{cursor:grabbing}
+.r3d-stage[data-modo="Zoom"] .r3d-canvas{cursor:none}
+.r3d-loader{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-family:var(--serif);font-style:italic;color:var(--tinta);background:rgba(243,230,203,.75);transition:opacity .6s;z-index:4}
+.r3d-loader i{display:block;width:200px;height:4px;background:rgba(42,29,18,.15);border-radius:2px;overflow:hidden}
+.r3d-loader b{display:block;height:100%;width:0;background:#8B5A1A;transition:width .2s}
+.r3d-loader.fuera{opacity:0;pointer-events:none}
+.r3d-labels{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .4s;z-index:2}
+.r3d-labels.on{opacity:1}
+.r3d-labels.on .r3d-tag{pointer-events:auto}
+.r3d-tag{position:absolute;left:0;top:0;display:flex;align-items:center;gap:6px;border:0;background:none;padding:0;font-family:var(--sans);font-size:11px;color:var(--tinta);white-space:nowrap;cursor:pointer}
+.r3d-tag::before{content:"";width:7px;height:7px;border-radius:50%;background:#8B1E19;box-shadow:0 0 0 2px rgba(255,255,255,.7);margin-left:-3.5px}
+.r3d-tag i{font-style:normal;font-family:var(--display);font-weight:700;background:var(--tinta);color:var(--pergamino-2);width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;margin-left:14px;position:relative}
+.r3d-tag i::before{content:"";position:absolute;right:100%;top:50%;width:14px;border-top:1px solid var(--tinta)}
+.r3d-tag span{background:rgba(255,250,238,.88);border:1px solid var(--linea);padding:2px 6px;border-radius:3px}
+.r3d-tag.sel span{background:var(--tinta);color:var(--pergamino-2)}
+.r3d-lupa{position:absolute;left:0;top:0;border-radius:50%;overflow:hidden;pointer-events:none;z-index:3;
+  box-shadow:0 0 0 7px #b8892a,0 0 0 9px #5a4012,0 10px 24px rgba(0,0,0,.35)}
+.r3d-lupa canvas{width:100%;height:100%;display:block;background:#efe3c8}
+.r3d-lupa.hallazgo{box-shadow:0 0 0 7px #d9a441,0 0 0 9px #8B1E19,0 0 28px rgba(217,164,65,.9)}
+.r3d-tools{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:10px;font-family:var(--sans);font-size:12px}
+.r3d-tools input{vertical-align:middle;width:200px;accent-color:#8B1E19}
+.pieza-card{margin-top:14px;border-top:1px dashed var(--linea);padding-top:10px}
+.pieza-card b{font-family:var(--display);font-size:16px;display:block;margin:4px 0}
+.pieza-card p{margin:0;font-size:14px}
+.pieza-card.on b{color:#8B1E19}
+@media (max-width:900px){.r3d-stage{height:440px}.r3d-tools input{width:150px}}
+.r3d-labels.abajo .r3d-tag{flex-direction:column;gap:3px}
+.r3d-labels.abajo .r3d-tag::before{display:none}
+.r3d-labels.abajo .r3d-tag i{margin-left:0}
+.r3d-labels.abajo .r3d-tag i::before{display:none}
+.r3d-labels.abajo .r3d-tag{align-items:center}
+.r3d-labels.izq .r3d-tag{flex-direction:row-reverse}
+.r3d-labels.izq .r3d-tag::before{margin-left:0;margin-right:-3.5px}
+.r3d-labels.izq .r3d-tag i{margin-left:0;margin-right:14px}
+.r3d-labels.izq .r3d-tag i::before{right:auto;left:100%}

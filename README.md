@@ -20,6 +20,10 @@ Experiencia web interactiva (scrolling story) del proyecto transmedia *El Imperi
 | `august.jpg`, `gideon.jpg` | Retratos de los personajes |
 | `august-cartel.jpg`, `grabado.jpg` | Imágenes de la portada del periódico |
 | `reloj-*.jpg` | Lámina técnica del reloj (capítulo 05 e inventario) |
+| `reloj3d.js` | Visor 3D del reloj: monta las piezas y aplica Montado, Despiece, Explosión, Corte, Transparencia y Zoom (lupa) |
+| `three-bundle.js` | three.js 0.170 + GLTFLoader, OrbitControls y decodificador Meshopt en un solo archivo |
+| `reloj-tapa.glb`, `reloj-mecanismo.glb`, `reloj-esfera.glb`, `reloj-bisel.glb` | Piezas 3D del reloj (comprimidas con Meshopt y texturas WebP) |
+| `reloj-completo.glb` | Calibre seccionado del taller (se ve en el modo Corte) |
 
 ## Cómo editar
 

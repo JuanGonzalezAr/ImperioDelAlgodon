@@ -390,22 +390,34 @@ const LAMINA = [
 ];
 function cap5() {
   const c = CAPITULOS[5];
-  const modos = ['Despiece', 'Explosión', 'Corte', 'Transparencia', 'Zoom'];
+  const modos = ['Montado', 'Despiece', 'Explosión', 'Corte', 'Transparencia', 'Zoom'];
+  const AYUDA = {
+    Montado: 'El reloj del capataz, cerrado. Arrastra para girarlo, rueda para acercarte. Toca una pieza para ver su ficha.',
+    'Despiece': 'Todas las piezas sobre la mesa del relojero. Toca una etiqueta o una pieza.',
+    'Explosión': 'Las capas se separan en su eje: tapa, mecanismo, esfera, agujas, bisel y cristal.',
+    Corte: 'Mueve la cuchilla para seccionar el reloj y mirar el tren de engranajes por dentro.',
+    Transparencia: 'La caja y la esfera se vuelven fantasma. Bajo la esfera, en la platina, brilla algo grabado.',
+    Zoom: 'Recorre la platina con la lupa. Busca junto a las 6.'
+  };
   seccion(5, `${cabecera(c)}
     <div class="desk">
-      <div class="span-8"><div class="paper"><div class="viz-head"><div><div class="note" style="letter-spacing:.15em">INSPECCIÓN DEL ARTEFACTO</div><div class="t">El reloj de bolsillo sustraído</div>
-        <div class="s">Elige un modo de visualización técnica. Con la lupa (Zoom) recorre la placa trasera.</div></div></div>
+      <div class="span-8"><div class="paper"><div class="viz-head"><div><div class="note" style="letter-spacing:.15em">INSPECCIÓN DEL ARTEFACTO · MODELO 3D</div><div class="t">El reloj de bolsillo sustraído</div>
+        <div class="s" id="modoAyuda">${AYUDA.Montado}</div></div></div>
         <div class="modes" id="modes">${modos.map((m, i) => `<button data-m="${m}" class="${i === 0 ? 'on' : ''}">${m}</button>`).join('')}</div>
-        ${mecanismoSVG()}<div class="coords" id="coords"></div></div></div>
+        <div class="r3d-stage" id="r3d" data-modo="Montado">${mecanismoSVG()}</div>
+        <div class="r3d-tools" id="corteTools" hidden><label>Cuchilla <input type="range" id="corteX" min="-1.05" max="1.05" step="0.01" value="0"></label>
+          <button class="toggle-table" id="tallerBtn" type="button">Ver calibre seccionado del taller</button></div>
+        <div class="coords" id="coords"></div></div></div>
       <div class="span-4"><div class="paper tilt-r"><div class="note" style="letter-spacing:.15em">PISTA RECUPERADA</div><div class="t" style="font-family:var(--display);font-size:18px">Coordenadas grabadas</div>
-        <p>Hay marcas diminutas en la placa trasera. Usa <b>Transparencia</b> o la <b>lupa</b> para leerlas.</p>
+        <p>Hay marcas diminutas en la platina, escondidas bajo la esfera. Usa <b>Transparencia</b> o la <b>lupa</b> para leerlas.</p>
         <div class="stats" style="grid-template-columns:1fr 1fr"><div class="stat"><span>Latitud</span><b id="lat" style="font-size:20px">— —</b></div><div class="stat"><span>Longitud</span><b id="lon" style="font-size:20px">— —</b></div></div>
-        <p class="note" style="margin-top:10px">Cruzadas con el mapa de cuero, señalan un punto ciego en la bahía.</p></div></div>
+        <p class="note" style="margin-top:10px">Cruzadas con el mapa de cuero, señalan un punto ciego en la bahía.</p>
+        <div class="pieza-card" id="piezaCard"><div class="note" style="letter-spacing:.15em">FICHA DE LA PIEZA</div><b id="piezaN">Ninguna seleccionada</b><p id="piezaI">Toca una pieza del reloj o una etiqueta para leer su ficha.</p></div></div></div>
       <div class="span-12"><div class="paper"><div class="viz-head"><div><div class="note" style="letter-spacing:.15em">LÁMINA TÉCNICA · EL RELOJ DEL CAPATAZ</div>
         <div class="t" id="laminaT">Vista en explosión</div><div class="s" id="laminaS"></div></div></div>
         <div class="lamina"><figure><img id="laminaImg" src="reloj-explosion.jpg" alt="Lámina técnica del reloj de bolsillo"></figure>
           <div class="lamina-side"><div class="lamina-thumbs">${LAMINA.map((l, i) => `<button data-l="${i}" class="${i === 0 ? 'on' : ''}"><img src="${l.img}" alt=""><span>${l.t}</span></button>`).join('')}</div>
-          <p class="note">La lámina cambia con el modo elegido en el visor. Pronto se reemplazará por un modelo 3D interactivo.</p>
+          <p class="note">La lámina de referencia sigue el modo elegido en el visor 3D.</p>
           <a class="toggle-table" href="reloj-lamina.jpg" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;margin-top:6px">Ver lámina completa</a></div></div></div></div>
       <div class="span-12">${dilema(c)}</div>
     </div>`);
@@ -414,16 +426,22 @@ function cap5() {
   $$('.lamina-thumbs button').forEach(b => b.addEventListener('click', () => verLamina(+b.dataset.l)));
   verLamina(0);
   const ly = id => $('#' + id);
-  const revelar = () => { $('#lat').textContent = '32.31° N'; $('#lon').textContent = '86.90° O'; $('#coords').textContent = '32.31° N · 86.90° O'; };
+  const revelar = () => { $('#lat').textContent = '32.31° N'; $('#lon').textContent = '86.90° O'; $('#coords').textContent = '32.31° N · 86.90° O · grabado en la platina'; };
+  // Visor SVG de respaldo (si el navegador no tiene WebGL)
   const reset = () => { ['lyBack', 'lyGears', 'lyDial', 'lyCase'].forEach(i => { ly(i).style.transform = ''; ly(i).style.opacity = 1; ly(i).removeAttribute('clip-path'); }); $('#lens').style.display = 'none'; };
-  const aplicar = m => {
+  const aplicarSVG = m => {
     reset();
-    verLamina({ Despiece: 0, 'Explosión': 0, Corte: 1, Transparencia: 2, Zoom: 2 }[m]);
     if (m === 'Despiece') { ly('lyCase').style.transform = 'translate(-40px,-40px) scale(1.05)'; ly('lyDial').style.transform = 'translate(25px,25px)'; }
     if (m === 'Explosión') { ly('lyCase').style.transform = 'translate(0,-60px)'; ly('lyDial').style.transform = 'translate(70px,-10px) scale(.6)'; ly('lyDial').style.transformOrigin = '200px 200px'; ly('lyGears').style.transform = 'translate(-30px,20px)'; }
     if (m === 'Corte') { ly('lyDial').setAttribute('clip-path', 'url(#corte)'); ly('lyCase').setAttribute('clip-path', 'url(#corte)'); }
     if (m === 'Transparencia') { ly('lyDial').style.opacity = .12; ly('lyGears').style.opacity = .35; revelar(); }
     if (m === 'Zoom') { ly('lyDial').style.opacity = .04; ly('lyGears').style.opacity = .35; $('#lens').style.display = ''; }
+  };
+  let visor = null;
+  const aplicar = m => {
+    verLamina({ Montado: 0, Despiece: 0, 'Explosión': 0, Corte: 1, Transparencia: 2, Zoom: 2 }[m]);
+    $('#modoAyuda').textContent = AYUDA[m]; $('#corteTools').hidden = !(visor && m === 'Corte');
+    if (visor) visor.setModo(m); else aplicarSVG(m);
   };
   $$('#modes button').forEach(b => b.addEventListener('click', () => { $$('#modes button').forEach(x => x.classList.toggle('on', x === b)); aplicar(b.dataset.m); }));
   const svg = $('#mech');
@@ -436,6 +454,26 @@ function cap5() {
     $('#lensUse').setAttribute('transform', `translate(${p.x - k * p.x} ${p.y - k * p.y}) scale(${k})`);
     if (Math.abs(p.x - 200) < 45 && Math.abs(p.y - 298) < 18) revelar();
   });
+  // Visor 3D: se carga cuando el capítulo se acerca a la pantalla
+  const stage = $('#r3d');
+  if (window.__reloj3d) { try { window.__reloj3d.destroy(); } catch (e) {} window.__reloj3d = null; }
+  const hora = estado.aliado === 'gideon' ? [4, 0] : [14, 0];
+  const iniciar = () => import('./reloj3d.js').then(mod => mod.montarReloj3D(stage, {
+    hora,
+    onRevelar: revelar,
+    onPieza: p => { $('#piezaN').textContent = p ? p.nombre : 'Ninguna seleccionada'; $('#piezaI').textContent = p ? p.info : 'Toca una pieza del reloj o una etiqueta para leer su ficha.'; $('#piezaCard').classList.toggle('on', !!p); },
+    onTaller: on => { $('#tallerBtn').textContent = on ? 'Volver al reloj seccionado' : 'Ver calibre seccionado del taller'; }
+  })).then(v => {
+    visor = window.__reloj3d = v; stage.classList.add('r3d-on');
+    const activo = $('#modes button.on'); if (activo && activo.dataset.m !== 'Montado') aplicar(activo.dataset.m);
+    let taller = false;
+    $('#tallerBtn').addEventListener('click', () => { taller = !taller; v.verTaller(taller); });
+    $('#corteX').addEventListener('input', e => v.setCorte(+e.target.value));
+  }).catch(err => { console.warn('Visor 3D no disponible, se usa la lámina SVG:', err); stage.classList.add('r3d-off'); });
+  if ('IntersectionObserver' in window) {
+    const ob = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { ob.disconnect(); iniciar(); } }, { rootMargin: '600px 0px' });
+    ob.observe(stage);
+  } else iniciar();
 }
 
 /* ==========================================================
